@@ -1,0 +1,311 @@
+# Q1. Series question:
+_______________________
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter no of terms : ";
+    cin >> n;
+
+    float term1 = 0;
+    float term2 = 0;
+    float sum = 0;
+
+    for (int i = 1; i <= n; i++) {
+        if (i % 2 == 1) {
+            term1 = term1 + 1 / pow(i, i);
+        } else {
+            term2 = term2 + 1 / pow(i, i);
+        }
+    }
+
+    sum = term1 - term2;
+    cout << sum;
+
+    return 0;
+}
+
+_______________________________
+
+Q2. Remove duplicates from Array
+_______________________________
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    int A[10], B[10], n, i, j, k = 0;
+    cout << "Enter the size of the array: ";
+    cin >> n;
+
+    cout << "Enter elements of array: ";
+    for (i = 0; i < n; i++) {
+        cin >> A[i];
+    }
+
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < k; j++) {
+            if (A[i] == B[j]) {
+                break;
+            }
+        }
+
+        if (j == k) {
+            B[k] = A[i];
+            k++;
+        }
+    }
+
+    cout << "Repeated elements after deletion: ";
+    for (i = 0; i < k; i++) {
+        cout << B[i] << " ";
+    }
+
+    return 0;
+}
+
+___________________________
+
+Q3. Repeating alphabet table
+___________________________
+
+#include <iostream>
+#include <map>
+#include <cctype>
+using namespace std;
+
+void countAlphabets(const string& text) {
+    map<char, int> frequency;
+
+    // Initialize map with all alphabets
+    for (char ch = 'a'; ch <= 'z'; ++ch)
+        frequency[ch] = 0;
+    for (char ch = 'A'; ch <= 'Z'; ++ch)
+        frequency[ch] = 0;
+
+    // Count occurrences
+    for (char ch : text) {
+        if (isalpha(ch)) {
+            frequency[ch]++;
+        }
+    }
+
+    // Print the table
+    cout << "Alphabet Frequency Table:\n";
+    cout << "-------------------------\n";
+    cout << "Letter | Count\n";
+    cout << "-------------------------\n";
+    for (auto it : frequency) {
+        if (it.second > 0) {
+            cout << "   " << it.first << "   |   " << it.second << "\n";
+        }
+    }
+}
+
+int main() {
+    string text;
+    cout << "Enter the text: ";
+    getline(cin, text);
+    countAlphabets(text);
+    return 0;
+}
+
+_____________________________
+
+Q4. String manipulation 
+_____________________________
+
+#include <iostream>
+using namespace std;
+
+int stringLength(char str[]) {
+    int len = 0;
+    while (str[len] != '\0') len++;
+    return len;
+}
+
+void showAddress(char str[]) {
+    for (int i = 0; str[i] != '\0'; i++)
+        cout << "Character: " << str[i] << ", Address: " << (void*)&str[i] << endl;
+}
+
+void concatenate(char str1[], char str2[], char result[]) {
+    int i = 0;
+    while (str1[i] != '\0') {
+        result[i] = str1[i];
+        i++;
+    }
+    int j = 0;
+    while (str2[j] != '\0') {
+        result[i++] = str2[j++];
+    }
+    result[i] = '\0';
+}
+
+bool compareStrings(char str1[], char str2[]) {
+    int i = 0;
+    while (str1[i] != '\0' && str2[i] != '\0') {
+        if (str1[i] != str2[i])
+            return false;
+        i++;
+    }
+    return str1[i] == '\0' && str2[i] == '\0';
+}
+
+void toUpperCase(char str[]) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] >= 'a' && str[i] <= 'z')
+            str[i] = str[i] - 32;
+    }
+}
+
+void reverseString(char str[]) {
+    int len = stringLength(str);
+    for (int i = 0; i < len / 2; i++) {
+        char temp = str[i];
+        str[i] = str[len - 1 - i];
+        str[len - 1 - i] = temp;
+    }
+}
+
+void insertString(char mainStr[], char subStr[], int pos) {
+    char result[200];
+    int i = 0;
+    for (; i < pos; i++)
+        result[i] = mainStr[i];
+    int j = 0;
+    while (subStr[j] != '\0')
+        result[i++] = subStr[j++];
+    j = pos;
+    while (mainStr[j] != '\0')
+        result[i++] = mainStr[j++];
+    result[i] = '\0';
+    cout << "Result: " << result << endl;
+}
+
+int main() {
+    char str1[100], str2[100], result[200];
+    int choice, pos;
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Show address of each character\n";
+        cout << "2. Concatenate two strings\n";
+        cout << "3. Compare two strings\n";
+        cout << "4. Calculate length of the string\n";
+        cout << "5. Convert to uppercase\n";
+        cout << "6. Reverse the string\n";
+        cout << "7. Insert one string into another\n";
+        cout << "8. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore(); // to clear newline
+
+        switch (choice) {
+        case 1:
+            cout << "Enter string: ";
+            cin.getline(str1, 100);
+            showAddress(str1);
+            break;
+        case 2:
+            cout << "Enter first string: ";
+            cin.getline(str1, 100);
+            cout << "Enter second string: ";
+            cin.getline(str2, 100);
+            concatenate(str1, str2, result);
+            cout << "Concatenated: " << result << endl;
+            break;
+        case 3:
+            cout << "Enter first string: ";
+            cin.getline(str1, 100);
+            cout << "Enter second string: ";
+            cin.getline(str2, 100);
+            if (compareStrings(str1, str2))
+                cout << "Strings are equal.\n";
+            else
+                cout << "Strings are not equal.\n";
+            break;
+        case 4:
+            cout << "Enter string: ";
+            cin.getline(str1, 100);
+            cout << "Length: " << stringLength(str1) << endl;
+            break;
+        case 5:
+            cout << "Enter string: ";
+            cin.getline(str1, 100);
+            toUpperCase(str1);
+            cout << "Uppercase: " << str1 << endl;
+            break;
+        case 6:
+            cout << "Enter string: ";
+            cin.getline(str1, 100);
+            reverseString(str1);
+            cout << "Reversed: " << str1 << endl;
+            break;
+        case 7:
+            cout << "Enter main string: ";
+            cin.getline(str1, 100);
+            cout << "Enter string to insert: ";
+            cin.getline(str2, 100);
+            cout << "Enter position: ";
+            cin >> pos;
+            insertString(str1, str2, pos);
+            break;
+        case 8:
+            cout << "Exiting...\n";
+            break;
+        default:
+            cout << "Invalid choice!\n";
+        }
+    } while (choice != 8);
+    return 0;
+}
+___________________________
+
+Q5. Merge two arrays
+___________________________
+
+#include <iostream>
+using namespace std;
+
+void mergeArrays(int arr1[], int arr2[], int n1, int n2, int arr3[]) {
+    int i = 0, j = 0, k = 0;
+
+    // Merge both arrays in sorted order
+    while (i < n1 && j < n2) {
+        if (arr1[i] < arr2[j])
+            arr3[k++] = arr1[i++];
+        else
+            arr3[k++] = arr2[j++];
+    }
+
+    // Copy remaining elements of arr1[]
+    while (i < n1)
+        arr3[k++] = arr1[i++];
+
+    // Copy remaining elements of arr2[]
+    while (j < n2)
+        arr3[k++] = arr2[j++];
+}
+
+int main() {
+    int arr1[] = {4, 5, 10, 12, 35};
+    int n1 = sizeof(arr1) / sizeof(arr1[0]);
+
+    int arr2[] = {6, 14, 93, 101, 105};
+    int n2 = sizeof(arr2) / sizeof(arr2[0]);
+
+    int arr3[n1 + n2]; // Resultant array
+
+    mergeArrays(arr1, arr2, n1, n2, arr3);
+
+    cout << "Array after merging\n";
+    for (int i = 0; i < n1 + n2; i++)
+        cout << arr3[i] << " ";
+
+    return 0;
+}
+_____________________
+
+Q6.
