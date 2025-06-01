@@ -1,0 +1,881 @@
+Q1. 
+code 
+#include <iostream>
+using namespace std;
+
+// Function to calculate power (base^exp) manually
+double power(int base, int exp) {
+    double result = 1;
+    for (int i = 0; i < exp; ++i) {
+        result *= base;
+    }
+    return result;
+}
+
+int main(int argc, char* argv[]) {
+    int n;
+
+    // If command-line argument is provided
+    if (argc > 1) {
+        n = 0;
+        // Convert string to integer
+        for (int i = 0; argv[1][i] != '\0'; ++i) {
+            n = n * 10 + (argv[1][i] - '0');
+        }
+    } else {
+        // Prompt user to enter value
+        cout << "Enter the number of terms (n): ";
+        cin >> n;
+    }
+
+    double sum = 1.0;
+
+    for (int i = 2; i <= n; ++i) {
+        double term = 1.0 / power(i, i);
+        if (i % 2 == 0)
+            sum -= term;
+        else
+            sum += term;
+    }
+
+    cout << "Sum of the series up to " << n << " terms is: " << sum << endl;
+
+    return 0;
+}
+
+Q2.Write a program to remove the duplicates from an array
+code
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+
+    // Input array size
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    int arr[100];
+
+    // Input array elements
+    cout << "Enter " << n << " elements:\n";
+    for (int i = 0; i < n; ++i) {
+        cin >> arr[i];
+    }
+
+    // Remove duplicates
+    int uniqueArr[100];  // To store unique elements
+    int uniqueCount = 0;
+
+    for (int i = 0; i < n; ++i) {
+        bool isDuplicate = false;
+
+        // Check if arr[i] already exists in uniqueArr
+        for (int j = 0; j < uniqueCount; ++j) {
+            if (arr[i] == uniqueArr[j]) {
+                isDuplicate = true;
+                break;
+            }
+        }
+
+        // If not duplicate, add to uniqueArr
+        if (!isDuplicate) {
+            uniqueArr[uniqueCount] = arr[i];
+            uniqueCount++;
+        }
+    }
+
+    // Output unique elements
+    cout << "Array after removing duplicates:\n";
+    for (int i = 0; i < uniqueCount; ++i) {
+        cout << uniqueArr[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
+
+Q3. Write a program that prints a table indicating the number of occurrences of each alphabet
+in the text entered as command line arguments.
+
+code
+
+#include <iostream>
+using namespace std;
+
+int main(int argc, char* argv[]) {
+    int count[26] = {0}; // For 'a' to 'z'
+
+    // Iterate through all command-line arguments (excluding program name)
+    for (int i = 1; i < argc; ++i) {
+        for (int j = 0; argv[i][j] != '\0'; ++j) {
+            char ch = argv[i][j];
+
+            // Convert uppercase to lowercase
+            if (ch >= 'A' && ch <= 'Z') {
+                ch = ch + ('a' - 'A');
+            }
+
+            // Count only alphabet characters
+            if (ch >= 'a' && ch <= 'z') {
+                count[ch - 'a']++;
+            }
+        }
+    }
+
+    // Display the frequency table
+    cout << "Alphabet\tCount\n";
+    for (int i = 0; i < 26; ++i) {
+        if (count[i] > 0) {
+            cout << char('a' + i) << "\t\t" << count[i] << endl;
+        }
+    }
+
+    return 0;
+}
+
+Q4 Write a menu driven program to perform string manipulation (without using inbuilt string
+functions):
+a. Show address of each character in string
+b. Concatenate two strings.
+c. Compare two strings
+d. Calculate length of the string (use pointers)
+e. Convert all lowercase characters to uppercase
+f. Reverse the string
+g. Insert a string in another string at a user specified position
+
+code
+#include <iostream>
+using namespace std;
+
+void showAddresses(char str[]) {
+    for (int i = 0; str[i] != '\0'; ++i) {
+        cout << "Character: " << str[i] << ", Address: " << (void*)&str[i] << endl;
+    }
+}
+
+void concatenate(char str1[], char str2[], char result[]) {
+    int i = 0, j = 0;
+    while (str1[i] != '\0') {
+        result[i] = str1[i];
+        ++i;
+    }
+    while (str2[j] != '\0') {
+        result[i] = str2[j];
+        ++i;
+        ++j;
+    }
+    result[i] = '\0';
+}
+
+int compare(char str1[], char str2[]) {
+    int i = 0;
+    while (str1[i] != '\0' && str2[i] != '\0') {
+        if (str1[i] != str2[i]) {
+            return (str1[i] > str2[i]) ? 1 : -1;
+        }
+        ++i;
+    }
+    if (str1[i] == '\0' && str2[i] == '\0')
+        return 0;
+    return (str1[i] == '\0') ? -1 : 1;
+}
+
+int length(char* str) {
+    int len = 0;
+    while (*str != '\0') {
+        ++len;
+        ++str;
+    }
+    return len;
+}
+
+void toUppercase(char str[]) {
+    for (int i = 0; str[i] != '\0'; ++i) {
+        if (str[i] >= 'a' && str[i] <= 'z') {
+            str[i] = str[i] - 32;
+        }
+    }
+}
+
+void reverse(char str[]) {
+    int len = length(str);
+    for (int i = 0; i < len / 2; ++i) {
+        char temp = str[i];
+        str[i] = str[len - i - 1];
+        str[len - i - 1] = temp;
+    }
+}
+
+void insertString(char str1[], char str2[], int pos, char result[]) {
+    int i = 0, j = 0, k = 0;
+
+    // Copy up to position
+    while (i < pos && str1[i] != '\0') {
+        result[k++] = str1[i++];
+    }
+
+    // Insert str2
+    while (str2[j] != '\0') {
+        result[k++] = str2[j++];
+    }
+
+    // Copy remaining of str1
+    while (str1[i] != '\0') {
+        result[k++] = str1[i++];
+    }
+
+    result[k] = '\0';
+}
+
+int main() {
+    const int SIZE = 100;
+    char str1[SIZE], str2[SIZE], result[2 * SIZE];
+    int choice;
+
+    do {
+        cout << "\n--- String Manipulation Menu ---\n";
+        cout << "1. Show address of each character\n";
+        cout << "2. Concatenate two strings\n";
+        cout << "3. Compare two strings\n";
+        cout << "4. Calculate length of the string\n";
+        cout << "5. Convert lowercase to uppercase\n";
+        cout << "6. Reverse the string\n";
+        cout << "7. Insert a string into another at a position\n";
+        cout << "0. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore(); // clear buffer
+
+        switch (choice) {
+            case 1:
+                cout << "Enter a string: ";
+                cin.getline(str1, SIZE);
+                showAddresses(str1);
+                break;
+            case 2:
+                cout << "Enter first string: ";
+                cin.getline(str1, SIZE);
+                cout << "Enter second string: ";
+                cin.getline(str2, SIZE);
+                concatenate(str1, str2, result);
+                cout << "Concatenated string: " << result << endl;
+                break;
+            case 3:
+                cout << "Enter first string: ";
+                cin.getline(str1, SIZE);
+                cout << "Enter second string: ";
+                cin.getline(str2, SIZE);
+                {
+                    int cmp = compare(str1, str2);
+                    if (cmp == 0)
+                        cout << "Strings are equal.\n";
+                    else if (cmp < 0)
+                        cout << "First string is smaller.\n";
+                    else
+                        cout << "First string is greater.\n";
+                }
+                break;
+            case 4:
+                cout << "Enter a string: ";
+                cin.getline(str1, SIZE);
+                cout << "Length of string: " << length(str1) << endl;
+                break;
+            case 5:
+                cout << "Enter a string: ";
+                cin.getline(str1, SIZE);
+                toUppercase(str1);
+                cout << "Uppercase string: " << str1 << endl;
+                break;
+            case 6:
+                cout << "Enter a string: ";
+                cin.getline(str1, SIZE);
+                reverse(str1);
+                cout << "Reversed string: " << str1 << endl;
+                break;
+            case 7:
+                int pos;
+                cout << "Enter base string: ";
+                cin.getline(str1, SIZE);
+                cout << "Enter string to insert: ";
+                cin.getline(str2, SIZE);
+                cout << "Enter position to insert at (0-based): ";
+                cin >> pos;
+                insertString(str1, str2, pos, result);
+                cout << "Resulting string: " << result << endl;
+                cin.ignore(); // clear buffer
+                break;
+            case 0:
+                cout << "Exiting program.\n";
+                break;
+            default:
+                cout << "Invalid choice! Try again.\n";
+        }
+
+    } while (choice != 0);
+
+    return 0;
+}
+
+Q5 Write a program to merge two ordered arrays to get a single ordered array.
+code 
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    const int SIZE = 100;
+    int arr1[SIZE], arr2[SIZE], merged[2 * SIZE];
+    int n1, n2;
+
+    // Input first sorted array
+    cout << "Enter number of elements in first sorted array: ";
+    cin >> n1;
+    cout << "Enter " << n1 << " elements (in ascending order): ";
+    for (int i = 0; i < n1; ++i) {
+        cin >> arr1[i];
+    }
+
+    // Input second sorted array
+    cout << "Enter number of elements in second sorted array: ";
+    cin >> n2;
+    cout << "Enter " << n2 << " elements (in ascending order): ";
+    for (int i = 0; i < n2; ++i) {
+        cin >> arr2[i];
+    }
+
+    // Merge arrays
+    int i = 0, j = 0, k = 0;
+    while (i < n1 && j < n2) {
+        if (arr1[i] < arr2[j])
+            merged[k++] = arr1[i++];
+        else
+            merged[k++] = arr2[j++];
+    }
+
+    // Copy remaining elements
+    while (i < n1)
+        merged[k++] = arr1[i++];
+    while (j < n2)
+        merged[k++] = arr2[j++];
+
+    // Output merged array
+    cout << "Merged ordered array:\n";
+    for (int x = 0; x < k; ++x) {
+        cout << merged[x] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
+
+Q6 Write a program to search a given element in a set of N numbers using Binary Search
+a. with recursion
+b. without recursion.
+
+code 
+
+#include <iostream>
+using namespace std;
+
+// Recursive Binary Search
+int binarySearchRecursive(int arr[], int left, int right, int key) {
+    if (left > right)
+        return -1; // Not found
+
+    int mid = (left + right) / 2;
+
+    if (arr[mid] == key)
+        return mid;
+    else if (arr[mid] > key)
+        return binarySearchRecursive(arr, left, mid - 1, key);
+    else
+        return binarySearchRecursive(arr, mid + 1, right, key);
+}
+
+// Iterative Binary Search
+int binarySearchIterative(int arr[], int n, int key) {
+    int left = 0, right = n - 1;
+
+    while (left <= right) {
+        int mid = (left + right) / 2;
+
+        if (arr[mid] == key)
+            return mid;
+        else if (arr[mid] > key)
+            right = mid - 1;
+        else
+            left = mid + 1;
+    }
+
+    return -1; // Not found
+}
+
+int main() {
+    const int SIZE = 100;
+    int arr[SIZE], n, key;
+
+    cout << "Enter number of elements (sorted array): ";
+    cin >> n;
+
+    cout << "Enter " << n << " sorted elements:\n";
+    for (int i = 0; i < n; ++i)
+        cin >> arr[i];
+
+    cout << "Enter element to search: ";
+    cin >> key;
+
+    // Using recursive binary search
+    int indexRec = binarySearchRecursive(arr, 0, n - 1, key);
+    if (indexRec != -1)
+        cout << "Recursive: Element found at index " << indexRec << endl;
+    else
+        cout << "Recursive: Element not found.\n";
+
+    // Using iterative binary search
+    int indexIter = binarySearchIterative(arr, n, key);
+    if (indexIter != -1)
+        cout << "Iterative: Element found at index " << indexIter << endl;
+    else
+        cout << "Iterative: Element not found.\n";
+
+    return 0;
+}
+
+Q7.Write a program to calculate GCD of two numbers
+a. with recursion
+b. without recursion.
+
+code 
+
+#include <iostream>
+using namespace std;
+
+// Recursive GCD
+int gcdRecursive(int a, int b) {
+    if (b == 0)
+        return a;
+    return gcdRecursive(b, a % b);
+}
+
+// Iterative GCD
+int gcdIterative(int a, int b) {
+    while (b != 0) {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+
+int main() {
+    int num1, num2;
+
+    cout << "Enter two positive integers: ";
+    cin >> num1 >> num2;
+
+    // Recursive GCD
+    int resultRec = gcdRecursive(num1, num2);
+    cout << "GCD (Recursive): " << resultRec << endl;
+
+    // Iterative GCD
+    int resultIter = gcdIterative(num1, num2);
+    cout << "GCD (Iterative): " << resultIter << endl;
+
+    return 0;
+}
+
+Q8.Create a Matrix class. Write a menu-driven program to perform following Matrix
+operations (exceptions should be thrown by the functions if matrices passed to them are
+incompatible and handled by the main() function):
+a. Sum
+b. Product
+c. Transpose
+
+code 
+#include <iostream>
+using namespace std;
+
+class Matrix {
+    int rows, cols;
+    int data[10][10]; // Max size 10x10 for simplicity
+
+public:
+    Matrix(int r = 0, int c = 0) : rows(r), cols(c) {}
+
+    void input() {
+        cout << "Enter elements of " << rows << "x" << cols << " matrix:\n";
+        for (int i = 0; i < rows; ++i)
+            for (int j = 0; j < cols; ++j)
+                cin >> data[i][j];
+    }
+
+    void display() const {
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j)
+                cout << data[i][j] << " ";
+            cout << endl;
+        }
+    }
+
+    Matrix add(const Matrix& m) const {
+        if (rows != m.rows || cols != m.cols)
+            throw "Addition error: Matrices must be of the same dimensions.";
+
+        Matrix result(rows, cols);
+        for (int i = 0; i < rows; ++i)
+            for (int j = 0; j < cols; ++j)
+                result.data[i][j] = data[i][j] + m.data[i][j];
+        return result;
+    }
+
+    Matrix multiply(const Matrix& m) const {
+        if (cols != m.rows)
+            throw "Multiplication error: Columns of first must equal rows of second.";
+
+        Matrix result(rows, m.cols);
+        for (int i = 0; i < rows; ++i)
+            for (int j = 0; j < m.cols; ++j) {
+                result.data[i][j] = 0;
+                for (int k = 0; k < cols; ++k)
+                    result.data[i][j] += data[i][k] * m.data[k][j];
+            }
+        return result;
+    }
+
+    Matrix transpose() const {
+        Matrix result(cols, rows);
+        for (int i = 0; i < rows; ++i)
+            for (int j = 0; j < cols; ++j)
+                result.data[j][i] = data[i][j];
+        return result;
+    }
+};
+
+int main() {
+    int r1, c1, r2, c2;
+    cout << "Enter rows and columns of first matrix: ";
+    cin >> r1 >> c1;
+    Matrix m1(r1, c1);
+    m1.input();
+
+    cout << "Enter rows and columns of second matrix: ";
+    cin >> r2 >> c2;
+    Matrix m2(r2, c2);
+    m2.input();
+
+    int choice;
+    do {
+        cout << "\n--- Matrix Operations Menu ---\n";
+        cout << "1. Add matrices\n";
+        cout << "2. Multiply matrices\n";
+        cout << "3. Transpose a matrix\n";
+        cout << "0. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        try {
+            switch (choice) {
+                case 1: {
+                    Matrix result = m1.add(m2);
+                    cout << "Result of Addition:\n";
+                    result.display();
+                    break;
+                }
+                case 2: {
+                    Matrix result = m1.multiply(m2);
+                    cout << "Result of Multiplication:\n";
+                    result.display();
+                    break;
+                }
+                case 3: {
+                    int tChoice;
+                    cout << "Transpose which matrix? (1 or 2): ";
+                    cin >> tChoice;
+                    if (tChoice == 1) {
+                        Matrix t = m1.transpose();
+                        cout << "Transpose of Matrix 1:\n";
+                        t.display();
+                    } else if (tChoice == 2) {
+                        Matrix t = m2.transpose();
+                        cout << "Transpose of Matrix 2:\n";
+                        t.display();
+                    } else {
+                        cout << "Invalid matrix choice.\n";
+                    }
+                    break;
+                }
+                case 0:
+                    cout << "Exiting program.\n";
+                    break;
+                default:
+                    cout << "Invalid choice. Try again.\n";
+            }
+        } catch (const char* msg) {
+            cout << "Error: " << msg << endl;
+        }
+
+    } while (choice != 0);
+
+    return 0;
+}
+
+Q9.Define a class Person having name as a data member. Inherit two classes Student and
+Employee from Person. Student has additional attributes as course, marks and year and
+Employee has department and salary. Write display() method in all the three classes to
+display the corresponding attributes. Provide the necessary methods to show runtime
+polymorphism.
+
+code 
+
+#include <iostream>
+using namespace std;
+
+class Person {
+protected:
+    string name;
+
+public:
+    Person(string n = "") : name(n) {}
+
+    virtual void display() {  // Virtual function for polymorphism
+        cout << "Name: " << name << endl;
+    }
+};
+
+class Student : public Person {
+    string course;
+    int marks;
+    int year;
+
+public:
+    Student(string n, string c, int m, int y) : Person(n), course(c), marks(m), year(y) {}
+
+    void display() override {
+        cout << "--- Student Info ---\n";
+        cout << "Name: " << name << endl;
+        cout << "Course: " << course << endl;
+        cout << "Marks: " << marks << endl;
+        cout << "Year: " << year << endl;
+    }
+};
+
+class Employee : public Person {
+    string department;
+    float salary;
+
+public:
+    Employee(string n, string d, float s) : Person(n), department(d), salary(s) {}
+
+    void display() override {
+        cout << "--- Employee Info ---\n";
+        cout << "Name: " << name << endl;
+        cout << "Department: " << department << endl;
+        cout << "Salary: " << salary << endl;
+    }
+};
+
+int main() {
+    Person* p;
+
+    Student s("Amit", "BCA", 85, 2);
+    Employee e("Ravi", "IT", 45000.50f);
+
+    // Runtime Polymorphism
+    p = &s;
+    p->display();  // Calls Student's display()
+
+    cout << endl;
+
+    p = &e;
+    p->display();  // Calls Employee's display()
+
+    return 0;
+}
+
+Q10.Create a Triangle class. Add exception handling statements to ensure the following
+conditions: all sides are greater than 0 and sum of any two sides is greater than the third
+side. The class should also have overloaded functions for calculating the area of a right
+angled triangle as well as using Heron's formula to calculate the area of any type of
+triangle.
+
+code 
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+class Triangle {
+    double a, b, c;
+
+public:
+    Triangle(double x, double y, double z) {
+        if (x <= 0 || y <= 0 || z <= 0)
+            throw "All sides must be greater than 0.";
+        if ((x + y <= z) || (x + z <= y) || (y + z <= x))
+            throw "Invalid triangle: Sum of any two sides must be greater than the third side.";
+
+        a = x; b = y; c = z;
+    }
+
+    // Area using Heron's formula
+    double area() const {
+        double s = (a + b + c) / 2.0;
+        return sqrt(s * (s - a) * (s - b) * (s - c));
+    }
+
+    // Overloaded area for right-angled triangle (base and height)
+    double area(double base, double height) const {
+        if (base <= 0 || height <= 0)
+            throw "Base and height must be greater than 0.";
+        return 0.5 * base * height;
+    }
+
+    void displaySides() const {
+        cout << "Triangle sides: " << a << ", " << b << ", " << c << endl;
+    }
+};
+
+int main() {
+    try {
+        double x, y, z;
+        cout << "Enter sides of the triangle: ";
+        cin >> x >> y >> z;
+
+        Triangle t(x, y, z);
+        t.displaySides();
+
+        cout << "Area using Heron's formula: " << t.area() << endl;
+
+        // Optional: Demonstrating overloaded method for right-angled triangle
+        double base, height;
+        cout << "\nEnter base and height for right-angled triangle: ";
+        cin >> base >> height;
+        cout << "Area using right-angled triangle formula: " << t.area(base, height) << endl;
+
+    } catch (const char* msg) {
+        cout << "Exception: " << msg << endl;
+    }
+
+    return 0;
+}
+
+Q11.Create a class Student containing fields for Roll No., Name, Class, Year and Total Marks.
+Write a program to store 5 objects of Student class in a file. Retrieve these records from
+the file and display them.
+
+code
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+class Student {
+public:
+    int rollNo;
+    char name[50];
+    char className[20];
+    int year;
+    int totalMarks;
+
+    void input() {
+        cout << "Enter Roll No: ";
+        cin >> rollNo;
+        cin.ignore(); // ignore newline after int input
+
+        cout << "Enter Name: ";
+        cin.getline(name, 50);
+
+        cout << "Enter Class: ";
+        cin.getline(className, 20);
+
+        cout << "Enter Year: ";
+        cin >> year;
+
+        cout << "Enter Total Marks: ";
+        cin >> totalMarks;
+        cin.ignore();
+    }
+
+    void display() {
+        cout << "Roll No: " << rollNo << endl;
+        cout << "Name: " << name << endl;
+        cout << "Class: " << className << endl;
+        cout << "Year: " << year << endl;
+        cout << "Total Marks: " << totalMarks << endl;
+        cout << "------------------------" << endl;
+    }
+};
+
+int main() {
+    Student students[5];
+
+    // Input details for 5 students
+    cout << "Enter details for 5 students:\n";
+    for (int i = 0; i < 5; i++) {
+        cout << "\nStudent " << (i + 1) << ":\n";
+        students[i].input();
+    }
+
+    // Write to file in binary mode
+    ofstream outFile("students.dat", ios::binary);
+    if (!outFile) {
+        cout << "Error opening file for writing." << endl;
+        return 1;
+    }
+    outFile.write(reinterpret_cast<char*>(students), sizeof(students));
+    outFile.close();
+
+    // Read from file
+    Student readStudents[5];
+    ifstream inFile("students.dat", ios::binary);
+    if (!inFile) {
+        cout << "Error opening file for reading." << endl;
+        return 1;
+    }
+    inFile.read(reinterpret_cast<char*>(readStudents), sizeof(readStudents));
+    inFile.close();
+
+    // Display the student details read from file
+    cout << "\nStudent records read from file:\n";
+    for (int i = 0; i < 5; i++) {
+        readStudents[i].display();
+    }
+
+    return 0;
+}
+
+Q12. Copy the contents of one text file to another file, after removing all whitespaces.
+
+code 
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main() {
+    ifstream inFile("input.txt");   // Source file
+    ofstream outFile("output.txt"); // Destination file
+
+    if (!inFile) {
+        cout << "Error opening input file." << endl;
+        return 1;
+    }
+    if (!outFile) {
+        cout << "Error opening output file." << endl;
+        return 1;
+    }
+
+    char ch;
+    while (inFile.get(ch)) {
+        // Check if ch is not a whitespace
+        if (!isspace(static_cast<unsigned char>(ch))) {
+            outFile.put(ch);
+        }
+    }
+
+    inFile.close();
+    outFile.close();
+
+    cout << "File copied without whitespaces." << endl;
+    return 0;
+}
